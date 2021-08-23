@@ -1,0 +1,24 @@
+#This script will be use to set up the environment for maven application and activate the software to run on linx platform
+#We are also going to use this script to set up our environment to practice git
+echo " JAVA -  Pre Requisite Software  and Git for code download "
+echo " Note: cd /opt directory before carrying out this task please "
+sudo yum install wget nano tree unzip git-all -y
+sudo yum install java-11-openjdk-devel java-1.8.0-openjdk-devel -y
+echo " The git version you just install is:"
+git --version 
+echo " The java version you just install is:"
+java -version
+echo " MAVEN INSTALLATION IN PROGRESS..."
+sudo wget https://downloads.apache.org/maven/maven-3/3.8.2/binaries/apache-maven-3.8.2-bin.zip
+sudo unzip apache-maven-3.8.2-bin.zip
+sudo mv apache-maven-3.8.2/ maven
+echo " Setting up environment variable for all users.. "
+echo "export PATH=$PATH:/opt/maven/bin" >> /etc/profile
+echo " Activating maven."
+source /etc/profile
+echo " The version of maven install is as shown below:"
+mvn -version
+echo "END OF INSTALLATION THANK YOU"
+
+
+
