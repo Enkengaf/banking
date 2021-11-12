@@ -1,0 +1,45 @@
+---
+ - name: my_app deployment
+   hosts: dev
+   gather_facts: false
+   remote_user: ec2-user
+   become_method: sudo
+   become: yes 
+   tasks:
+   - name: create the webapps group on remote server
+     group:
+       name: webapps
+       gid: 570
+       state: present
+   - name: create my_app_user
+     user:
+       name: my_app_user
+       uid: 1503
+       group: webapps
+       state: present
+   - name: Git clone remote repository
+     git:
+       repo: git@bitbucket.org:my-org/my_app.git
+       key_file: /home/ec2-user/private_key
+       dest: /home/my_app_user/
+       single_branch: yes
+       version: dev
+       clone: yes
+       update: yes
+   - name: dependencies for my_app
+     yum: name={{iterm}} state=present
+     with_iterm:
+     - python3-devel
+     - nginx
+   - name: deploying my_app
+     copy:
+        src: /home/my_app_user/my_app.git
+        dest: /opt/my_app
+     become: yes
+     become_user: my_app_user
+     chdir: /opt/my_app
+     target: install
+   - name: restart nginx service
+        name: nginx
+        state: restarted
+      
