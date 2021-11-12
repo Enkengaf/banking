@@ -1,0 +1,22 @@
+version '3.1'
+services:
+  orange1:
+   image: orange
+   ports:
+   - 8000:8080
+   network: capitalone
+   volume:
+   - /var/lib/jenkins/show:/data/db
+  apple:
+   image: apple
+   ports:
+   - 7000:8080
+   network: apple  
+volumes:
+  show:
+   driver: local  
+networks:
+  capitalone:
+   driver: bridge
+  apple:
+   driver: bridge
